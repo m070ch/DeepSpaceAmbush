@@ -132,6 +132,10 @@ public class Hero {
 		}
 	}
 	
+	public void receiveHeal(int h) {
+		health += h;
+	}
+	
 	public void restoreStamina() {
 		if(actionItem != null) {
 			stamina = stamina + (health/2)+actionItem.getStamina();

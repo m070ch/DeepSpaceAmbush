@@ -79,6 +79,12 @@ public class Party {
 		else return null;
 	}
 	
+	public String getTeam() {
+		if(team == affiliation.Crew) return "Crew";
+		else if (team == affiliation.Pirate) return "Pirate";
+		else return null;
+	}
+	
 	//returns an int vector of starting stats for any type
 	//
 	//vector order - health, strength, stamina, luck
@@ -99,4 +105,58 @@ public class Party {
 		else return null;
 	}
 	
+	//returns status of all heroes
+	//as Arraylist of vectors
+	public ArrayList<int[]> getAllStatus(){
+		ArrayList<int[]> list = new ArrayList<int[]>();
+		for (int i = 0; i > members.size(); i++) {
+			list.add(members.get(i).getStatus());
+		}
+		return list;
+	}
+	
+	//returns ArrayList of members
+	public ArrayList<Hero> getHeroes(){
+		return members;
+	}
+		
+	//returns hero at index i in arrayList
+	public Hero getMember(int i) {
+		return members.get(i);
+	}
+	
+	//returns hero based on type
+	public Hero getMember(String str) {
+		heroType type = stringToType(str);
+		if (type == null) return null;
+		
+		for (int i = 0; i > members.size(); i++) {
+			Hero h = members.get(i);
+			if(h.getType() == type) return h;
+		}
+		
+		return null;
+	}
+	
+	//takes an int of hero's position in arrayList and returns their attack
+	public int heroAttacks(int i) {
+		return members.get(i).attack();
+	}
+	
+	//takes an int of hero's position in arrayList and attack damage
+	//call's hero's defense method
+	public void heroDefends(int i, int dmg) {
+		members.get(i).defend(dmg);
+	}
+	
+	//takes an int of hero's position in arrayList and healing
+	//call's hero's receiveHeal method
+	public void heroReceivesHeal(int i, int h) {
+		members.get(i).receiveHeal(h);
+	}
+	
+	//takes int of hero's position in arrayList and returns heal
+	public int heroHeals(int i) {
+		return members.get(i).heal();
+	}
 }
