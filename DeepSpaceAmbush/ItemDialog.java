@@ -5,11 +5,6 @@ import javax.swing.*;
 
 public class ItemDialog{
 
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private ButtonGroup crewRadios;
 	private JRadioButton crew1radio;
 	private JRadioButton crew2radio;
