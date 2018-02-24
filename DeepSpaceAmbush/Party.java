@@ -91,16 +91,16 @@ public class Party {
 	//need to add in starting stats for types
 	public int[] getStatsOfType(heroType type) {
 		if(type == heroType.Brute) {
-			return new int[]{1,1,1,1};
+			return new int[]{10,10,5,2};
 		}
 		else if(type == heroType.Medic) {
-			return new int[]{1,1,1,1};
+			return new int[]{5,10,5,3};
 		}
 		else if(type == heroType.Sniper) {
-			return new int[]{1,1,1,1};
+			return new int[]{10,5,10,5};
 		}
 		else if(type == heroType.Engineer) {
-			return new int[]{1,1,1,1};
+			return new int[]{5,10,10,2};
 		}
 		else return null;
 	}
@@ -115,9 +115,35 @@ public class Party {
 		return list;
 	}
 	
+	//returns status of all heroes
+	//as Arraylist of vectors
+	public ArrayList<String> getAllStatusAsString(){
+		String str = "";
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i > members.size(); i++) {
+			int[] status = members.get(i).getStatus();
+			str += "Health: "+Integer.toString(status[1])+"\n";
+			str += "Strength: "+Integer.toString(status[2])+"\n";
+			str += "Stamina: "+Integer.toString(status[3])+"\n";
+			str += "Luck: "+Integer.toString(status[4])+"\n";
+			list.add(str);
+		}
+		return list;
+	}
+	
 	//returns ArrayList of members
 	public ArrayList<Hero> getHeroes(){
 		return members;
+	}
+	
+	public ArrayList<String> getHeroesAsString() {
+		ArrayList<String> str = new ArrayList<String>();
+		
+		for (int i = 0; i < members.size(); i++) {
+			str.add(members.get(i).getName());
+		}
+		
+		return(str);
 	}
 		
 	//returns hero at index i in arrayList

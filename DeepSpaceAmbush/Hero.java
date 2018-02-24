@@ -103,6 +103,7 @@ public class Hero {
 	}
 	
 	public int defend(int dmg){
+		int arc = health;
 		int crit = 1; 
 		if(defenseItem != null) {
 			if (new Random().nextInt(10) <= (luck+actionItem.getLuck())-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
@@ -113,7 +114,7 @@ public class Hero {
 			health = health - dmg;
 		}
 		
-		return health;
+		return arc - health;
 	}
 	
 	public int heal(){

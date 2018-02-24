@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -36,6 +38,9 @@ public class GameplayGUI extends JFrame{
 	private JTextArea messageBox;
 	private JButton doTurn;
 	
+	Party pirates;
+	Party crew;
+	
 	public GameplayGUI() {
 		setTitle("Deep Space Ambush");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,7 +55,7 @@ public class GameplayGUI extends JFrame{
 		add(topPanel, BorderLayout.NORTH);
 		
 		add(sidePanel(), BorderLayout.EAST);
-		
+	
 	}
 	
 	public JPanel sidePanel() {
@@ -60,6 +65,7 @@ public class GameplayGUI extends JFrame{
 		messageBox = new JTextArea(30, 15);
 		messageBox.setBorder(new TitledBorder("Messages"));
 		doTurn = new JButton("Execute Turn");
+		doTurn.addActionListener(new ButtonListener());
 		
 		sidePanel.add(messageBox, BorderLayout.CENTER);
 		sidePanel.add(doTurn, BorderLayout.SOUTH);
@@ -100,15 +106,18 @@ public class GameplayGUI extends JFrame{
 		pirateRadios = new ButtonGroup();
 		
 		pirate1radio = new JRadioButton("Pirate 1");
+		pirate1radio.setActionCommand("1");
 		c.gridx = 0;
 		c.gridy = 1;
 		piratePanel.add(pirate1radio, c);
 		
 		pirate2radio = new JRadioButton("Pirate 2");
+		pirate2radio.setActionCommand("2");
 		c.gridx = 1;
 		piratePanel.add(pirate2radio, c);
 		
 		pirate3radio = new JRadioButton("Pirate 3");
+		pirate3radio.setActionCommand("3");
 		c.gridx = 2;
 		piratePanel.add(pirate3radio, c);
 		
@@ -143,15 +152,18 @@ public class GameplayGUI extends JFrame{
 		crewRadios = new ButtonGroup();
 		
 		crew1radio = new JRadioButton("Crew 1");
+		crew1radio.setActionCommand("1");
 		c.gridx = 0;
 		c.gridy = 1;
 		crewPanel.add(crew1radio, c);
 		
 		crew2radio = new JRadioButton("Crew 2");
+		crew2radio.setActionCommand("2");
 		c.gridx = 1;
 		crewPanel.add(crew2radio, c);
 		
 		crew3radio = new JRadioButton("Crew 3");
+		crew3radio.setActionCommand("3");
 		c.gridx = 2;
 		crewPanel.add(crew3radio, c);
 		
@@ -161,6 +173,47 @@ public class GameplayGUI extends JFrame{
 		
 		return(crewPanel);
 	}
+	
+	private class ButtonListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			String actionCommand=e.getActionCommand();
+			if (actionCommand.equals("Execute Turn")){
+				exTurn(crewRadios.getSelection().getActionCommand(), pirateRadios.getSelection().getActionCommand());
+			}
+		}
+	}
+	
+	public void exTurn(String crewIndex, String pirateIndex) {
+		Hero crewMember = crew.getMember(Integer.parseInt(crewIndex));
+		Hero pirateMember = pirates.getMember(Integer.parseInt(pirateIndex));
+		
+		int attack = crewMember.attack();
+		messageBox.append("Crew "+crewMember.getName()+" attacked the pirate "+pirateMember.getName()
+				+" with "+Integer.toString(attack)+" strength\n");
+		int defend = pirateMember.defend(attack);
+		messageBox.append("Pirate Member "+pirateMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+		
+		attack = pirateMember.attack();
+		messageBox.append("Pirate "+pirateMember.getName()+" retaliated with "+Integer.toString(attack)+" strength\n");
+		defend = crewMember.defend(attack);
+		messageBox.append("Crew "+crewMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+		
+		refreshStatus();
+	}
+	
+	public void refreshStatus() {
+		ArrayList<String> crewStatus = crew.getAllStatusAsString();
+		crew1text.setText(crewStatus.get(1));
+		crew2text.setText(crewStatus.get(2));
+		crew3text.setText(crewStatus.get(3));
+		
+		ArrayList<String> piratesStatus = pirates.getAllStatusAsString();
+		pirate1text.setText(piratesStatus.get(1));
+		pirate2text.setText(piratesStatus.get(2));
+		pirate3text.setText(piratesStatus.get(3));
+	}
+	
+	
 	
 	
 	public static void main(String[] args){
