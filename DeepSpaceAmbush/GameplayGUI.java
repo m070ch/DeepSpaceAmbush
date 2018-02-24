@@ -6,8 +6,12 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 
-public class GameplayGUI extends JFrame{
+public class GameplayGUI extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//declarations
 	private JPanel topPanel;
 	private JLabel topLabel;
@@ -38,8 +42,19 @@ public class GameplayGUI extends JFrame{
 	private JTextArea messageBox;
 	private JButton doTurn;
 	
-	Party pirates;
-	Party crew;
+	//TODO: declarations for objects to be added
+	private ItemDialog itemDialog;
+	private ArrayList<Level> levels;
+	//TODO: [Oumar] finish method public void levelBuilder() that builds levels
+	//				located directly above main()
+	//TODO: [Oumar] declarations for objects to be created- use ItemDialog class as guide
+	//private PartyBuilder partyBuilder;
+	//private OpeningDialog openingDialog;
+	//private LoseDialog loseDialog;
+	//private WinDialog winDialog; 
+	
+	private Party pirates;
+	private Party crew;
 	
 	public GameplayGUI() {
 		setTitle("Deep Space Ambush");
@@ -192,28 +207,70 @@ public class GameplayGUI extends JFrame{
 				+" with "+Integer.toString(attack)+" strength\n");
 		int defend = pirateMember.defend(attack);
 		messageBox.append("Pirate Member "+pirateMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+		if(pirateMember.getHealth() > 0) {
+			attack = pirateMember.attack();
+			messageBox.append("Pirate "+pirateMember.getName()+" retaliated with "+Integer.toString(attack)+" strength\n");
+			defend = crewMember.defend(attack);
+			messageBox.append("Crew "+crewMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+			if(crewMember.getHealth() == 0) {
+				messageBox.append("Crew "+crewMember.getName()+" is dead\n");
+			}
+		} else messageBox.append("Pirate "+pirateMember.getName()+" is dead\n");
 		
-		attack = pirateMember.attack();
-		messageBox.append("Pirate "+pirateMember.getName()+" retaliated with "+Integer.toString(attack)+" strength\n");
-		defend = crewMember.defend(attack);
-		messageBox.append("Crew "+crewMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+		String cont = refreshStatus();
 		
-		refreshStatus();
+		if (cont.equals("pirate victory")) {
+			//TODO:pirate victory behavior
+		}
+		else if (cont.equals("crew victory")) {
+			//TODO:crew victory behavior
+			//TODO: itemDialog.show(crew.getAllStatusAsString(), itemstats).setItem(*item dropped*);
+		}
 	}
 	
-	public void refreshStatus() {
+	public String refreshStatus() {
+		int deadCount = 0;
 		ArrayList<String> crewStatus = crew.getAllStatusAsString();
-		crew1text.setText(crewStatus.get(1));
-		crew2text.setText(crewStatus.get(2));
-		crew3text.setText(crewStatus.get(3));
+		crew1text.setText(crewStatus.get(0));
+		crew2text.setText(crewStatus.get(1));
+		crew3text.setText(crewStatus.get(2));
 		
 		ArrayList<String> piratesStatus = pirates.getAllStatusAsString();
-		pirate1text.setText(piratesStatus.get(1));
-		pirate2text.setText(piratesStatus.get(2));
-		pirate3text.setText(piratesStatus.get(3));
+		pirate1text.setText(piratesStatus.get(0));
+		pirate2text.setText(piratesStatus.get(1));
+		pirate3text.setText(piratesStatus.get(2));
+		
+		for(int i = 0; i < 3; i++) {
+			if (crewStatus.get(i).equals("dead")) deadCount++;
+		}
+		if (deadCount == 3) return "pirate victory";
+		
+		deadCount = 0;
+		
+		for(int i = 0; i < 3; i++) {
+			if (piratesStatus.get(i).equals("dead")) deadCount++;
+		}
+		if (deadCount == 3) return "crew victory";
+		
+		return "continue";
+		
 	}
 	
-	
+	public void levelBuilder() {
+		levels = new ArrayList<Level>();
+		//repeat this 10 times adding in w/e values you want
+		Party pirateParty = new Party();
+		pirateParty.createPirateParty(
+				pirateParty.customPirateBuilder("type as a string", new int[]{0, 0, 0, 0}), //strength, defense, stamina, luck
+				pirateParty.customPirateBuilder("type as a string", new int[]{0, 0, 0, 0}),
+				pirateParty.customPirateBuilder("type as a string", new int[]{0, 0, 0, 0})
+		);
+		levels.add(new Level(pirateParty, 
+					new ActionItem("name of item", 0, 0, 0, 0) //strength, defense, stamina, luck (set some to 0)
+				)
+		);
+		
+	}
 	
 	
 	public static void main(String[] args){

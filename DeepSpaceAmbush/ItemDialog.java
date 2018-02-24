@@ -38,12 +38,12 @@ public class ItemDialog{
 	}
 	
 	public JRadioButton[] setCrew(ArrayList<String> crew) {
-		crew1radio.setText(crew.get(1));
-		crew1radio.setActionCommand(crew.get(1));
-		crew2radio.setText(crew.get(2));
-		crew2radio.setActionCommand(crew.get(2));
-		crew3radio.setText(crew.get(3));
-		crew3radio.setActionCommand(crew.get(3));
+		crew1radio.setText(crew.get(0));
+		crew1radio.setActionCommand(crew.get(0));
+		crew2radio.setText(crew.get(1));
+		crew2radio.setActionCommand(crew.get(1));
+		crew3radio.setText(crew.get(2));
+		crew3radio.setActionCommand(crew.get(2));
 		
 		return new JRadioButton[] {crew1radio, crew2radio, crew3radio};
 	}

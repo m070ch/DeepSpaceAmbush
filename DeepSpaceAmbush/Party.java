@@ -19,9 +19,16 @@ public class Party {
 	//i.e. {"Engineer", "Medic", "Brute"}
 	public void createParty(String affStr, String[] types) {
 		members = new ArrayList<Hero>();
+		members.add(buildHero(types[0], affStr));
 		members.add(buildHero(types[1], affStr));
 		members.add(buildHero(types[2], affStr));
-		members.add(buildHero(types[3], affStr));
+	}
+	
+	public void createPirateParty(Hero pirate1, Hero pirate2, Hero pirate3) {
+		members = new ArrayList<Hero>();
+		members.add(pirate1);
+		members.add(pirate2);
+		members.add(pirate3);
 	}
 	
 	//takes a string of a hero type (i.e. "engineer") and
@@ -34,10 +41,10 @@ public class Party {
 		int[] stats = getStatsOfType(enumType);
 		
 		String str = "";
-		str += "Health: "+Integer.toString(stats[1])+"\n";
-		str += "Strength: "+Integer.toString(stats[2])+"\n";
-		str += "Stamina: "+Integer.toString(stats[3])+"\n";
-		str += "Luck: "+Integer.toString(stats[4])+"\n";
+		str += "Health: "+Integer.toString(stats[0])+"\n";
+		str += "Strength: "+Integer.toString(stats[1])+"\n";
+		str += "Stamina: "+Integer.toString(stats[2])+"\n";
+		str += "Luck: "+Integer.toString(stats[3])+"\n";
 		
 		return str;
 	}
@@ -53,6 +60,11 @@ public class Party {
 		int[] stats = getStatsOfType(enumType);
 		
 		return new Hero(type+"-"+team, enumTeam, enumType, stats);
+	}
+	
+	public Hero customPirateBuilder(String type, int[] stats) {
+		heroType enumType = stringToType(type);
+		return new Hero(type+"-Pirate", affiliation.Pirate, enumType, stats[0], stats[1], stats[2], stats[3]);
 	}
 	
 	//converts a string into a heroType enumerated type
@@ -109,7 +121,7 @@ public class Party {
 	//as Arraylist of vectors
 	public ArrayList<int[]> getAllStatus(){
 		ArrayList<int[]> list = new ArrayList<int[]>();
-		for (int i = 0; i > members.size(); i++) {
+		for (int i = 0; i < members.size(); i++) {
 			list.add(members.get(i).getStatus());
 		}
 		return list;
@@ -120,13 +132,18 @@ public class Party {
 	public ArrayList<String> getAllStatusAsString(){
 		String str = "";
 		ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i > members.size(); i++) {
+		for (int i = 0; i < members.size(); i++) {
 			int[] status = members.get(i).getStatus();
-			str += "Health: "+Integer.toString(status[1])+"\n";
-			str += "Strength: "+Integer.toString(status[2])+"\n";
-			str += "Stamina: "+Integer.toString(status[3])+"\n";
-			str += "Luck: "+Integer.toString(status[4])+"\n";
-			list.add(str);
+			if (status[0] == 0) {
+				list.add("dead");
+			}
+			else {
+				str += "Health: "+Integer.toString(status[0])+"\n";
+				str += "Strength: "+Integer.toString(status[1])+"\n";
+				str += "Stamina: "+Integer.toString(status[2])+"\n";
+				str += "Luck: "+Integer.toString(status[3])+"\n";
+				list.add(str);
+			}
 		}
 		return list;
 	}
@@ -156,7 +173,7 @@ public class Party {
 		heroType type = stringToType(str);
 		if (type == null) return null;
 		
-		for (int i = 0; i > members.size(); i++) {
+		for (int i = 0; i < members.size(); i++) {
 			Hero h = members.get(i);
 			if(h.getType() == type) return h;
 		}

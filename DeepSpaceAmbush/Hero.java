@@ -37,10 +37,10 @@ public class Hero {
 		this.name = name;
 		this.type = type;
 		this.team = team;
-		this.health = stats[1];
-		this.strength = stats[2];
-		this.stamina = stats[3];
-		this.luck = stats[4];
+		this.health = stats[0];
+		this.strength = stats[1];
+		this.stamina = stats[2];
+		this.luck = stats[3];
 	}
 	
 	//Return the Hero's name
@@ -52,6 +52,10 @@ public class Hero {
 	//not sure if higher levels of program will be able to access this enumerated type
 	public Party.heroType getType(){
 		return type;
+	}
+	
+	public int getHealth() {
+		return health;
 	}
 	
 	public String getTypeAsString() {
@@ -77,6 +81,11 @@ public class Hero {
 	//Return the Hero's status (health, strength, stamina, luck)
 	public int[] getStatus() {
 		return new int[]{health, strength, stamina, luck};
+	}
+	
+	public void setItem(Item item) {
+		if (item instanceof ActionItem) setActionItem((ActionItem) item);
+		else if (item instanceof DefenseItem) setDefenseItem((DefenseItem) item);
 	}
 	
 	//
