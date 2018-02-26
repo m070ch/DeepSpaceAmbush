@@ -83,16 +83,16 @@ public class Party {
 	
 	//converts a string into a heroType enumerated type
 	public heroType stringToType(String type) {
-		if(type == "Brute") {
+		if(type.equals("Brute")) {
 			return heroType.Brute;
 		}
-		else if(type == "Medic") {
+		else if(type.equals("Medic")) {
 			return heroType.Medic;
 		}
-		else if(type == "Sniper") {
+		else if(type.equals("Sniper")) {
 			return heroType.Sniper;
 		}
-		else if(type == "Engineer") {
+		else if(type.equals("Engineer")) {
 			return heroType.Engineer;
 		}
 		else return null;
