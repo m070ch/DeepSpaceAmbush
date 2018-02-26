@@ -31,6 +31,20 @@ public class Party {
 		members.add(pirate3);
 	}
 	
+	public void restoreTeam() {
+		for (int i = 0; i < members.size(); i++) {
+			members.get(i).restoreAll(getStatsOfType(members.get(i).getType()));
+		}
+	}
+	
+	public ArrayList<String> teamTypesAsString() {
+		ArrayList<String> strs = new ArrayList<String>();
+		for (int i = 0; i < members.size(); i++) {
+			strs.add(members.get(i).getTypeAsString());
+		}
+		return strs;
+	}
+	
 	//takes a string of a hero type (i.e. "engineer") and
 	//returns a string with all of that type's starting stats
 	//for the party builder screen in GUI

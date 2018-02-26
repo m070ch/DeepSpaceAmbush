@@ -45,6 +45,7 @@ public class GameplayGUI extends JFrame {
 	//TODO: declarations for objects to be added
 	private ItemDialog itemDialog;
 	private ArrayList<Level> levels;
+	private int levelNumber;
 	//TODO: [Oumar] finish method public void levelBuilder() that builds levels
 	//				located directly above main()
 	//TODO: [Oumar] declarations for objects to be created- use ItemDialog class as guide
@@ -52,7 +53,7 @@ public class GameplayGUI extends JFrame {
 	//private OpeningDialog openingDialog;
 	//private LoseDialog loseDialog;
 	//private WinDialog winDialog; 
-	
+	/////////////////////////////////////////////////////////////
 	private Party pirates;
 	private Party crew;
 	
@@ -71,6 +72,7 @@ public class GameplayGUI extends JFrame {
 		
 		add(sidePanel(), BorderLayout.EAST);
 	
+		levelNumber = 0;
 	}
 	
 	public JPanel sidePanel() {
@@ -198,6 +200,7 @@ public class GameplayGUI extends JFrame {
 		}
 	}
 	
+	
 	public void exTurn(String crewIndex, String pirateIndex) {
 		Hero crewMember = crew.getMember(Integer.parseInt(crewIndex));
 		Hero pirateMember = pirates.getMember(Integer.parseInt(pirateIndex));
@@ -224,8 +227,26 @@ public class GameplayGUI extends JFrame {
 		}
 		else if (cont.equals("crew victory")) {
 			//TODO:crew victory behavior
-			//TODO: itemDialog.show(crew.getAllStatusAsString(), itemstats).setItem(*item dropped*);
+			//Item Dialog wants list of crew as string
+			//need to test Item type (action v/ defense) and use appropriate Hero method setAction/DefenseItem
+			Item itemTemp = levels.get(levelNumber).getItem();
+			String type = itemDialog.show(crew.teamTypesAsString(), itemTemp.getStats());
+			crew.getMember(type).setItem(itemTemp);
+			loadLevel();
 		}
+	}
+	
+	public void buildCrew(String[] crew) {
+		this.crew = new Party();
+		this.crew.createParty("Crew", crew);
+	}
+	
+	public void loadLevel() {
+		pirates = levels.get(levelNumber).getPirates();
+		crew.restoreTeam();
+		refreshStatus();
+		topLabel = new JLabel("Level "+Integer.toString(levelNumber+1));
+		levelNumber++;
 	}
 	
 	public String refreshStatus() {
@@ -266,7 +287,7 @@ public class GameplayGUI extends JFrame {
 				pirateParty.customPirateBuilder("type as a string", new int[]{0, 0, 0, 0})
 		);
 		levels.add(new Level(pirateParty, 
-					new ActionItem("name of item", 0, 0, 0, 0) //strength, defense, stamina, luck (set some to 0)
+					new ActionItem("name of item", 0, 0, 0) //strength, defense, stamina, luck (set some to 0)
 				)
 		);
 		

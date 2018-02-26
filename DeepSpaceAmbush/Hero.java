@@ -158,5 +158,12 @@ public class Hero {
 			health = health+defenseItem.getHealth();
 		}
 	}
+	
+	public void restoreAll(int[] stats) {
+		this.health = stats[0];
+		this.strength = stats[1];
+		this.stamina = stats[2];
+		this.luck = stats[3];
+	}
 		
 }

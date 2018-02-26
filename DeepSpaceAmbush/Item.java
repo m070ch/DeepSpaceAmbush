@@ -1,5 +1,5 @@
 
-public class Item {
+public abstract class Item {
 
 	//the items name
 	private String name;
@@ -12,5 +12,7 @@ public class Item {
 	public String getName() {
 		return name;
 	}
+	
+	public abstract String getStats();
 	
 }

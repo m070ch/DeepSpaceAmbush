@@ -18,4 +18,11 @@ public class DefenseItem extends Item {
 	public int getHealth() {
 		return health;
 	}
+	
+	public String getStats() {
+		String str = "";
+		if (armor > 0 ) str += "Armor: +"+Integer.toString(armor)+"\n";
+		if (health > 0 ) str += "Healing: +"+Integer.toString(health)+"\n";
+		return str;
+	}
 }
