@@ -26,7 +26,7 @@ public class ActionItem extends Item {
 	}
 	
 	public String getStats() {
-		String str = "";
+		String str = super.getStats();
 		if (damage > 0 ) str += "Damage: +"+Integer.toString(damage)+"\n";
 		if (stamina > 0 ) str += "Stamina: +"+Integer.toString(stamina)+"\n";
 		if (luck > 0 ) str += "Luck: +"+Integer.toString(luck)+"\n";

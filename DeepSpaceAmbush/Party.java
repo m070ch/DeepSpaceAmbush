@@ -147,6 +147,7 @@ public class Party {
 		String str = "";
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < members.size(); i++) {
+			str = "";
 			int[] status = members.get(i).getStatus();
 			if (status[0] == 0) {
 				list.add("dead");
@@ -156,6 +157,12 @@ public class Party {
 				str += "Strength: "+Integer.toString(status[1])+"\n";
 				str += "Stamina: "+Integer.toString(status[2])+"\n";
 				str += "Luck: "+Integer.toString(status[3])+"\n";
+				if (members.get(i).getActionItem() != null) {
+					str += members.get(i).getActionItem().getStats();
+				}
+				if (members.get(i).getDefenseItem() != null) {
+					str += members.get(i).getDefenseItem().getStats();
+				}
 				list.add(str);
 			}
 		}

@@ -20,9 +20,9 @@ public class DefenseItem extends Item {
 	}
 	
 	public String getStats() {
-		String str = "";
-		if (armor > 0 ) str += "Armor: +"+Integer.toString(armor)+"\n";
-		if (health > 0 ) str += "Healing: +"+Integer.toString(health)+"\n";
+		String str = super.getStats();
+		if (armor > 0 ) str += "\tArmor: +"+Integer.toString(armor)+"\n";
+		if (health > 0 ) str += "\tHealing: +"+Integer.toString(health)+"\n";
 		return str;
 	}
 }

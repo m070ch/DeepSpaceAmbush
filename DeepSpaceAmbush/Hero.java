@@ -88,6 +88,14 @@ public class Hero {
 		else if (item instanceof DefenseItem) setDefenseItem((DefenseItem) item);
 	}
 	
+	public ActionItem getActionItem() {
+		return actionItem;
+	}
+	
+	public DefenseItem getDefenseItem() {
+		return defenseItem;
+	}
+	
 	//
 	public void setActionItem(ActionItem actionItem) {
 		this.actionItem = actionItem;
@@ -114,13 +122,21 @@ public class Hero {
 	public int defend(int dmg){
 		int arc = health;
 		int crit = 1; 
-		if(defenseItem != null) {
+		if(defenseItem != null & actionItem != null) {
 			if (new Random().nextInt(10) <= (luck+actionItem.getLuck())-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
 			health = health - ((dmg-defenseItem.getArmor())/crit);
 		}
+		else if (actionItem != null) {
+			if (new Random().nextInt(10) <= luck-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
+			health = health - dmg/crit;
+		}
+		else if (defenseItem != null) {
+			if (new Random().nextInt(10) <= luck-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
+			health = health - ((dmg-defenseItem.getArmor())/crit);
+		}
 		else {
-			if (new Random().nextInt(10) <= (luck+actionItem.getLuck())-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
-			health = health - dmg;
+			if (new Random().nextInt(10) <= luck-1 & type != Party.heroType.Engineer) crit = 2; 
+			health = health - dmg/crit;
 		}
 		
 		return arc - health;

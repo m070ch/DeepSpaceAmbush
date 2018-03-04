@@ -55,34 +55,62 @@ public class GameplayGUI extends JFrame {
 	//private WinDialog winDialog; 
 	/////////////////////////////////////////////////////////////
 	private Party pirates;
-	private Party crew;
+	private static Party crew;
 	
-	public GameplayGUI() {
+	public GameplayGUI(String[] args) {
 		setTitle("Deep Space Ambush");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		setBounds(5, 5, 900, 650);
+		setMinimumSize(new Dimension(800, 450));
 		
 		add(centerPanel(), BorderLayout.CENTER);
 		
 		topPanel = new JPanel();
+		topPanel.setBackground(new Color(168, 79, 79));
 		topLabel = new JLabel("Level 1");
+		topLabel.setFont(new Font(topLabel.getFont().toString(), Font.BOLD, 14));
 		topPanel.add(topLabel);
 		add(topPanel, BorderLayout.NORTH);
 		
 		add(sidePanel(), BorderLayout.EAST);
 	
+		levelBuilder();
 		levelNumber = 0;
+		buildCrew(args);
+		loadLevel();
+		refreshStatus();
 	}
 	
 	public JPanel sidePanel() {
 		sidePanel = new JPanel();
 		sidePanel.setLayout(new BorderLayout());
 		
-		messageBox = new JTextArea(30, 15);
-		messageBox.setBorder(new TitledBorder("Messages"));
+		messageBox = new JTextArea(30, 20);
+		messageBox.setLineWrap(true);
+		
+		TitledBorder titleBorder = new TitledBorder("Messages");
+		titleBorder.setTitleColor(new Color(0,0,0));
+		titleBorder.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+		
+		messageBox.setBorder(titleBorder);
+		messageBox.setBackground(new Color(147, 147, 147));
+		
 		doTurn = new JButton("Execute Turn");
 		doTurn.addActionListener(new ButtonListener());
+		doTurn.setBackground(new Color(168, 79, 79));
+		doTurn.setPreferredSize(new Dimension(20,60));
+		
+		doTurn.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		        doTurn.setBackground(new Color(79, 168, 79));
+		    }
+
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		        doTurn.setBackground(new Color(168, 79, 79));
+		    }
+		});
+		doTurn.setActionCommand("Execute Turn");
 		
 		sidePanel.add(messageBox, BorderLayout.CENTER);
 		sidePanel.add(doTurn, BorderLayout.SOUTH);
@@ -93,9 +121,13 @@ public class GameplayGUI extends JFrame {
 	public JPanel centerPanel() {
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(2,1));
-		centerPanel.setBorder(new TitledBorder("Battle"));
+		TitledBorder titleBorder = new TitledBorder("Battle");
+		titleBorder.setTitleColor(new Color(255, 255, 255));
+		titleBorder.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255)));
+		centerPanel.setBorder(titleBorder);
 		centerPanel.add(piratePanel());
 		centerPanel.add(crewPanel());
+		centerPanel.setBackground(new Color(68, 71, 76));
 		return centerPanel;
 	}
 	
@@ -103,20 +135,34 @@ public class GameplayGUI extends JFrame {
 		piratePanel = new JPanel();
 		piratePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		piratePanel.setBackground(new Color(68, 71, 76));
+		
+		TitledBorder titleBorder = new TitledBorder("Pirate 1");
+		titleBorder.setTitleColor(new Color(0,0,0));
+		titleBorder.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+		TitledBorder titleBorder2 = new TitledBorder("Pirate 2");
+		titleBorder2.setTitleColor(new Color(0,0,0));
+		titleBorder2.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+		TitledBorder titleBorder3 = new TitledBorder("Pirate 3");
+		titleBorder3.setTitleColor(new Color(0,0,0));
+		titleBorder3.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
 		
 		pirate1text = new JTextArea(7, 15);
-		pirate1text.setBorder(new TitledBorder("Pirate 1"));
+		pirate1text.setBorder(titleBorder);
+		pirate1text.setBackground(new Color(147, 147, 147));
 		c.gridx = 0;
 		c.gridy = 0;
 		piratePanel.add(pirate1text, c);
 		
 		pirate2text = new JTextArea(7, 15);
-		pirate2text.setBorder(new TitledBorder("Pirate 2"));
+		pirate2text.setBorder(titleBorder2);
+		pirate2text.setBackground(new Color(147, 147, 147));
 		c.gridx = 1;
 		piratePanel.add(pirate2text, c);
 		
 		pirate3text = new JTextArea(7, 15);
-		pirate3text.setBorder(new TitledBorder("Pirate 3"));
+		pirate3text.setBorder(titleBorder3);
+		pirate3text.setBackground(new Color(147, 147, 147));
 		c.gridx = 2;
 		piratePanel.add(pirate3text, c);
 		
@@ -124,17 +170,23 @@ public class GameplayGUI extends JFrame {
 		
 		pirate1radio = new JRadioButton("Pirate 1");
 		pirate1radio.setActionCommand("1");
+		pirate1radio.setBackground(new Color(68, 71, 76));
+		pirate1radio.setForeground(new Color(255,255,255));
 		c.gridx = 0;
 		c.gridy = 1;
 		piratePanel.add(pirate1radio, c);
 		
 		pirate2radio = new JRadioButton("Pirate 2");
 		pirate2radio.setActionCommand("2");
+		pirate2radio.setBackground(new Color(68, 71, 76));
+		pirate2radio.setForeground(new Color(255,255,255));
 		c.gridx = 1;
 		piratePanel.add(pirate2radio, c);
 		
 		pirate3radio = new JRadioButton("Pirate 3");
 		pirate3radio.setActionCommand("3");
+		pirate3radio.setBackground(new Color(68, 71, 76));
+		pirate3radio.setForeground(new Color(255,255,255));
 		c.gridx = 2;
 		piratePanel.add(pirate3radio, c);
 		
@@ -149,44 +201,67 @@ public class GameplayGUI extends JFrame {
 		crewPanel = new JPanel();
 		crewPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		crewPanel.setBackground(new Color(68, 71, 76));
 		
-		crew1text = new JTextArea(7, 15);
-		crew1text.setBorder(new TitledBorder("Crew 1"));
-		c.gridx = 0;
-		c.gridy = 0;
-		crewPanel.add(crew1text, c);
-		
-		crew2text = new JTextArea(7, 15);
-		crew2text.setBorder(new TitledBorder("Crew 2"));
-		c.gridx = 1;
-		crewPanel.add(crew2text, c);
-		
-		crew3text = new JTextArea(7, 15);
-		crew3text.setBorder(new TitledBorder("Crew 3"));
-		c.gridx = 2;
-		crewPanel.add(crew3text, c);
+		TitledBorder titleBorder = new TitledBorder("Crew 1");
+		titleBorder.setTitleColor(new Color(0,0,0));
+		titleBorder.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+		TitledBorder titleBorder2 = new TitledBorder("Crew 2");
+		titleBorder2.setTitleColor(new Color(0,0,0));
+		titleBorder2.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+		TitledBorder titleBorder3 = new TitledBorder("Crew 3");
+		titleBorder3.setTitleColor(new Color(0,0,0));
+		titleBorder3.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
 		
 		crewRadios = new ButtonGroup();
 		
 		crew1radio = new JRadioButton("Crew 1");
 		crew1radio.setActionCommand("1");
+		crew1radio.setBackground(new Color(68, 71, 76));
+		crew1radio.setForeground(new Color(255,255,255));
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 0;
 		crewPanel.add(crew1radio, c);
 		
 		crew2radio = new JRadioButton("Crew 2");
 		crew2radio.setActionCommand("2");
+		crew2radio.setBackground(new Color(68, 71, 76));
+		crew2radio.setForeground(new Color(255,255,255));
 		c.gridx = 1;
 		crewPanel.add(crew2radio, c);
 		
 		crew3radio = new JRadioButton("Crew 3");
 		crew3radio.setActionCommand("3");
+		crew3radio.setBackground(new Color(68, 71, 76));
+		crew3radio.setForeground(new Color(255,255,255));
 		c.gridx = 2;
 		crewPanel.add(crew3radio, c);
 		
 		crewRadios.add(crew1radio);
 		crewRadios.add(crew2radio);
 		crewRadios.add(crew3radio);
+		
+
+		crew1text = new JTextArea(7, 15);
+		crew1text.setBorder(titleBorder);
+		crew1text.setBackground(new Color(147, 147, 147));
+		c.gridx = 0;
+		c.gridy = 1;
+		crewPanel.add(crew1text, c);
+		
+		crew2text = new JTextArea(7, 15);
+		crew2text.setBorder(titleBorder2);
+		crew2text.setBackground(new Color(147, 147, 147));
+		c.gridx = 1;
+		crewPanel.add(crew2text, c);
+		
+		crew3text = new JTextArea(7, 15);
+		crew3text.setBorder(titleBorder3);
+		crew3text.setBackground(new Color(147, 147, 147));
+		c.gridx = 2;
+		crewPanel.add(crew3text, c);
+		
+
 		
 		return(crewPanel);
 	}
@@ -200,13 +275,12 @@ public class GameplayGUI extends JFrame {
 		}
 	}
 	
-	
 	public void exTurn(String crewIndex, String pirateIndex) {
 		Hero crewMember = crew.getMember(Integer.parseInt(crewIndex));
 		Hero pirateMember = pirates.getMember(Integer.parseInt(pirateIndex));
 		
 		int attack = crewMember.attack();
-		messageBox.append("Crew "+crewMember.getName()+" attacked the pirate "+pirateMember.getName()
+		messageBox.append(crewMember.getName()+" attacked "+pirateMember.getName()
 				+" with "+Integer.toString(attack)+" strength\n");
 		int defend = pirateMember.defend(attack);
 		messageBox.append("Pirate Member "+pirateMember.getName()+" took "+Integer.toString(defend)+" damage\n");
@@ -236,9 +310,12 @@ public class GameplayGUI extends JFrame {
 		}
 	}
 	
-	public void buildCrew(String[] crew) {
-		this.crew = new Party();
-		this.crew.createParty("Crew", crew);
+	public void buildCrew(String[] args) {
+		crew = new Party();
+		crew.createParty("Crew", args);
+		((TitledBorder) crew1text.getBorder()).setTitle(crew.getMember(0).getName());
+		((TitledBorder) crew2text.getBorder()).setTitle(crew.getMember(1).getName());
+		((TitledBorder) crew3text.getBorder()).setTitle(crew.getMember(2).getName());
 	}
 	
 	public void loadLevel() {
@@ -295,7 +372,9 @@ public class GameplayGUI extends JFrame {
 	
 	
 	public static void main(String[] args){
-		GameplayGUI window = new GameplayGUI();
+		GameplayGUI window = new GameplayGUI(args);
 		window.setVisible(true);
+		//buildCrew(args);
+		
 	}// end main method
 }

@@ -13,6 +13,8 @@ public abstract class Item {
 		return name;
 	}
 	
-	public abstract String getStats();
+	public String getStats() {
+		return name+"\n";
+	}
 	
 }
