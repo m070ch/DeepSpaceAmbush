@@ -117,16 +117,16 @@ public class Party {
 	//need to add in starting stats for types
 	public int[] getStatsOfType(heroType type) {
 		if(type == heroType.Brute) {
-			return new int[]{10,10,5,2};
+			return new int[]{100,100,50,20};
 		}
 		else if(type == heroType.Medic) {
-			return new int[]{5,10,5,3};
+			return new int[]{50,100,50,30};
 		}
 		else if(type == heroType.Sniper) {
-			return new int[]{10,5,10,5};
+			return new int[]{100,50,100,50};
 		}
 		else if(type == heroType.Engineer) {
-			return new int[]{5,10,10,2};
+			return new int[]{50,100,100,20};
 		}
 		else return null;
 	}
@@ -149,7 +149,7 @@ public class Party {
 		for (int i = 0; i < members.size(); i++) {
 			str = "";
 			int[] status = members.get(i).getStatus();
-			if (status[0] == 0) {
+			if (status[0] <= 0) {
 				list.add("dead");
 			}
 			else {
@@ -211,6 +211,7 @@ public class Party {
 	//call's hero's defense method
 	public void heroDefends(int i, int dmg) {
 		members.get(i).defend(dmg);
+		members.get(i).restoreHealth();
 	}
 	
 	//takes an int of hero's position in arrayList and healing

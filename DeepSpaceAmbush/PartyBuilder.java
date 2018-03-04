@@ -14,6 +14,11 @@ public class PartyBuilder extends JFrame{
 	
 	//constructor
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PartyBuilder() {
 		initComponents();
 	}
@@ -90,11 +95,7 @@ public class PartyBuilder extends JFrame{
     		//checkbox addition
     		
     		bruteSelection.setText("Brute");
-    		bruteSelection.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    bruteSelectionActionPerformed(evt);
-                }
-            });
+
     	
     		
     	
@@ -119,11 +120,6 @@ public class PartyBuilder extends JFrame{
     		//checkbox addition
     		
     		medicSelection.setText("Medic");
-    		medicSelection.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    medicSelectionActionPerformed(evt);
-                }
-            });
     		
     		
     		/*-------------Sniper Variables------------- */
@@ -146,11 +142,7 @@ public class PartyBuilder extends JFrame{
     		// checkbox addition
     		
     		sniperSelection.setText("Sniper");
-    		sniperSelection.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    sniperSelectionActionPerformed(evt);
-                }
-            });
+
     		
     		/*-------------Engineer Variables------------- */
     		
@@ -170,11 +162,7 @@ public class PartyBuilder extends JFrame{
             });
     		
     		engineerSelection.setText("Engineer");
-    		engineerSelection.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    engineerSelectionActionPerformed(evt);
-                }
-            });
+
     		
     		
     		/*--------------Continue Button----------------*/
@@ -267,7 +255,7 @@ public class PartyBuilder extends JFrame{
         
     	// Displays the stats for the Medic class
         
-        medicStatsBox.setText(retrieveTextBrute());
+        medicStatsBox.setText(retrieveTextMedic());
     }   
     
 //Sniperstats box update
@@ -276,7 +264,7 @@ public class PartyBuilder extends JFrame{
         
     	// Displays the stats for the Medic class
         
-        sniperStatsBox.setText(retrieveTextBrute());
+        sniperStatsBox.setText(retrieveTextSniper());
     }   
     
     
@@ -286,41 +274,12 @@ public class PartyBuilder extends JFrame{
         
     	// Displays the stats for the Medic class
         
-        sniperStatsBox.setText(retrieveTextBrute());
+        sniperStatsBox.setText(retrieveTextEngineer());
     }   
     
    /*--------------Methods for the checkbox selection------------------  */ 
     
-    
-    //Brute
-   
-  //bruteSelection action
-	  private void bruteSelectionActionPerformed(java.awt.event.ActionEvent evt) {                                           
-	        // TODO add your handling code here:
-	       
-	        
-	    }    
-	  
-    //Medic
-    
-    private void medicSelectionActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }  
-    
-    
-    //Engineer
-    
-    
-    private void engineerSelectionActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }  
-    
-    //Sniper
-    
-    
-    private void sniperSelectionActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }  
+
     
     
     
@@ -404,25 +363,25 @@ public class PartyBuilder extends JFrame{
     		    
     		     private String retrieveTextBrute(){
     		        String text = new String();
-    		        text += "Attack: 10\nDefense: 10\nStamina: 5\nItem: Axe";
+    		        text += "Attack: 10\nDefense: 10\nStamina: 5\nLuck: 2";
     		    	return(text);
     		    }
     		    
     		      private String retrieveTextMedic(){
     		        String text = new String();
-    		        text += "Attack: 5\nDefense: 10\nStamina: 5\nItem: Healing Wand";
+    		        text += "Attack: 5\nDefense: 10\nStamina: 5\nLuck: 3";
     		    	return(text);
     		    }
     		      
     		       private String retrieveTextEngineer(){
     		        String text = new String();
-    		        text += "Attack: 10\nDefense: 5\nStamina: 5\nItem: Torch Gun";
+    		        text += "Attack: 10\nDefense: 5\nStamina: 5\nLuck: 2";
     		    	return(text);
     		    }
     		       
     		        private String retrieveTextSniper(){
     		        String text = new String();
-    		        text += "Attack: 10\nDefense: 5\nStamina: 10\nItem: Sniper Cannon";
+    		        text += "Attack: 10\nDefense: 5\nStamina: 10\nLuck: 5";
     		    	return(text);
     		    }
     		        

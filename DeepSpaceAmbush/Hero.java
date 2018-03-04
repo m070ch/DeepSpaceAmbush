@@ -107,15 +107,15 @@ public class Hero {
 	
 	public int attack(){
 		int crit = 1; //crit represent critical hit
-		stamina = stamina-(strength/2); //degrade stamina on hit
+		stamina = stamina-(strength/5); //degrade stamina on hit
 		if(actionItem != null) {
-			if (new Random().nextInt(10) <= (luck+actionItem.getLuck())-1 & type != Party.heroType.Sniper) crit = 2; //luck of 1 has 1/10 to be true
-			return ((strength*(stamina/2))+actionItem.getDamage())*crit; //attack strength is function of stamina, 
+			if (new Random().nextInt(10)*10 <= (luck+actionItem.getLuck())-1 & type != Party.heroType.Sniper) crit = 2; //luck of 1 has 1/10 to be true
+			return ((strength+(stamina/100))+actionItem.getDamage())*crit; //attack strength is function of stamina, 
 																	//strength, item, and critical chance
 		}
 		else {
-			if (new Random().nextInt(10) <= luck-1) crit = 2; //luck of 1 has 1/10 to be true
-			return ((strength*(stamina/2))*crit);
+			if (new Random().nextInt(10)*10 <= luck-1) crit = 2; //luck of 1 has 1/10 to be true
+			return ((strength+(stamina/10))*crit);
 		}
 	}
 	
@@ -123,20 +123,20 @@ public class Hero {
 		int arc = health;
 		int crit = 1; 
 		if(defenseItem != null & actionItem != null) {
-			if (new Random().nextInt(10) <= (luck+actionItem.getLuck())-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
-			health = health - ((dmg-defenseItem.getArmor())/crit);
+			if (new Random().nextInt(10)*10 <= (luck+actionItem.getLuck())-10 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
+			health = health - ((dmg-defenseItem.getArmor()-stamina/10)/crit);
 		}
 		else if (actionItem != null) {
-			if (new Random().nextInt(10) <= luck-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
-			health = health - dmg/crit;
+			if (new Random().nextInt(10)*10 <= luck-10 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
+			health = (health - dmg-stamina/10)/crit;
 		}
 		else if (defenseItem != null) {
-			if (new Random().nextInt(10) <= luck-1 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
-			health = health - ((dmg-defenseItem.getArmor())/crit);
+			if (new Random().nextInt(10)*10 <= luck-10 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
+			health = health - ((dmg-defenseItem.getArmor()-stamina/10)/crit);
 		}
 		else {
-			if (new Random().nextInt(10) <= luck-1 & type != Party.heroType.Engineer) crit = 2; 
-			health = health - dmg/crit;
+			if (new Random().nextInt(10)*10 <= luck-10 & type != Party.heroType.Engineer) crit = 2; 
+			health = (health - dmg -stamina/10)/crit;
 		}
 		
 		return arc - health;
