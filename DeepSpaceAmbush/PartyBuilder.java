@@ -51,6 +51,8 @@ public class PartyBuilder extends JFrame{
 	JTextArea sniperStatsBox = new JTextArea();
 	JCheckBox sniperSelection = new JCheckBox();
 	
+	JLabel titleLabel;
+	
 	//Method to initiate the frame
 	
 	
@@ -69,7 +71,7 @@ public class PartyBuilder extends JFrame{
     	
     		/*--------------Title Label----------------*/
     	
-    		JLabel titleLabel = new JLabel();
+    		titleLabel = new JLabel();
     		titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     		titleLabel.setText("Please select your team");
     		
@@ -198,12 +200,12 @@ public class PartyBuilder extends JFrame{
     																.addComponent(brutePanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
     							                                    .addComponent(medicPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
     							                                    .addComponent(bruteSelection)
-    							                                    .addComponent(engineerSelection))
+    							                                    .addComponent(medicSelection))
     														.addGap(27, 27, 27)
     						                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-    						                                    .addComponent(sniperPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
     						                                    .addComponent(engineerPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-    						                                    .addComponent(medicSelection)
+    						                                    .addComponent(sniperPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+    						                                    .addComponent(engineerSelection)
     						                                    .addComponent(sniperSelection))))))
     														.addContainerGap(18, Short.MAX_VALUE))
     						);
@@ -220,14 +222,14 @@ public class PartyBuilder extends JFrame{
     	                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
     	                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
     	                    .addComponent(bruteSelection)
-    	                    .addComponent(medicSelection))
+    	                    .addComponent(engineerSelection))
     	                .addGap(25, 25, 25)
     	                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
     	                    .addComponent(medicPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
     	                    .addComponent(sniperPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
     	                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
     	                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-    	                    .addComponent(engineerSelection)
+    	                    .addComponent(medicSelection)
     	                    .addComponent(sniperSelection))
     	                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
     	                .addComponent(continueButton)
@@ -274,7 +276,7 @@ public class PartyBuilder extends JFrame{
         
     	// Displays the stats for the Medic class
         
-        sniperStatsBox.setText(retrieveTextEngineer());
+        engineerStatsBox.setText(retrieveTextEngineer());
     }   
     
    /*--------------Methods for the checkbox selection------------------  */ 
@@ -290,6 +292,9 @@ public class PartyBuilder extends JFrame{
     		        if (properSelection()){
     		         GameplayGUI.main(getSelection());
     		        this.setVisible(false);
+    		        } else {
+    		        	titleLabel.setText("You must make exactly 3 selections!");
+    		        	titleLabel.setBackground(new Color(168, 79, 79));
     		        }
     		        //else{   
     		        //new TooManyChoicesError().setVisible(true);
@@ -363,25 +368,25 @@ public class PartyBuilder extends JFrame{
     		    
     		     private String retrieveTextBrute(){
     		        String text = new String();
-    		        text += "Attack: 10\nDefense: 10\nStamina: 5\nLuck: 2";
+    		        text += "Health: 175\nStrength: 100\nStamina: 50\nLuck: 20";
     		    	return(text);
     		    }
     		    
     		      private String retrieveTextMedic(){
     		        String text = new String();
-    		        text += "Attack: 5\nDefense: 10\nStamina: 5\nLuck: 3";
+    		        text += "Health: 175\nStrength: 50\nStamina: 50\nLuck: 30";
     		    	return(text);
     		    }
     		      
     		       private String retrieveTextEngineer(){
     		        String text = new String();
-    		        text += "Attack: 10\nDefense: 5\nStamina: 5\nLuck: 2";
+    		        text += "Health: 200\nStrength: 50\nStamina: 100\nLuck: 20";
     		    	return(text);
     		    }
     		       
     		        private String retrieveTextSniper(){
     		        String text = new String();
-    		        text += "Attack: 10\nDefense: 5\nStamina: 10\nLuck: 5";
+    		        text += "Health: 150\nStrength: 100\nStamina: 100\nLuck: 50";
     		    	return(text);
     		    }
     		        

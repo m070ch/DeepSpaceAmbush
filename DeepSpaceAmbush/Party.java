@@ -24,11 +24,16 @@ public class Party {
 		members.add(buildHero(types[2], affStr));
 	}
 	
-	public void createPirateParty(Hero pirate1, Hero pirate2, Hero pirate3) {
+	public void createPirateParty(String[] types, int lvl) {
 		members = new ArrayList<Hero>();
-		members.add(pirate1);
-		members.add(pirate2);
-		members.add(pirate3);
+		
+		for(int i=0; i < types.length; i++) {
+			int[] stats = getStatsOfType(stringToType(types[i]));
+			for(int j=0; j < stats.length; j++) {
+				stats[j] += (lvl)*10;
+			}
+			members.add(customPirateBuilder(types[i], stats));
+		}
 	}
 	
 	public void restoreTeam() {
@@ -117,16 +122,16 @@ public class Party {
 	//need to add in starting stats for types
 	public int[] getStatsOfType(heroType type) {
 		if(type == heroType.Brute) {
-			return new int[]{100,100,50,20};
+			return new int[]{175,100,50,20};
 		}
 		else if(type == heroType.Medic) {
-			return new int[]{50,100,50,30};
+			return new int[]{175,50,50,30};
 		}
 		else if(type == heroType.Sniper) {
-			return new int[]{100,50,100,50};
+			return new int[]{150,100,100,50};
 		}
 		else if(type == heroType.Engineer) {
-			return new int[]{50,100,100,20};
+			return new int[]{200,50,100,20};
 		}
 		else return null;
 	}

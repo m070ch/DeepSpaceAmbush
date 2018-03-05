@@ -42,6 +42,7 @@ public class GameplayGUI extends JFrame {
 	
 	private JPanel sidePanel;
 	private JTextArea messageBox;
+	private JScrollPane messageScroll;
 	private JButton doTurn;
 	
 	//TODO: declarations for objects to be added
@@ -62,18 +63,22 @@ public class GameplayGUI extends JFrame {
 	public GameplayGUI(String[] args) {
 		setTitle("Deep Space Ambush");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		
 		setLayout(new BorderLayout());
 		setBounds(5, 5, 900, 650);
 		setMinimumSize(new Dimension(800, 450));
-		
-		add(centerPanel(), BorderLayout.CENTER);
+
 		
 		topPanel = new JPanel();
 		topPanel.setBackground(new Color(168, 79, 79));
 		topLabel = new JLabel("Level 1");
 		topLabel.setFont(new Font(topLabel.getFont().toString(), Font.BOLD, 14));
 		topPanel.add(topLabel);
+		
 		add(topPanel, BorderLayout.NORTH);
+		
+		add(centerPanel(), BorderLayout.CENTER);
 		
 		add(sidePanel(), BorderLayout.EAST);
 	
@@ -87,6 +92,7 @@ public class GameplayGUI extends JFrame {
 	public JPanel sidePanel() {
 		sidePanel = new JPanel();
 		sidePanel.setLayout(new BorderLayout());
+		
 		
 		messageBox = new JTextArea(30, 20);
 		messageBox.setLineWrap(true);
@@ -116,6 +122,7 @@ public class GameplayGUI extends JFrame {
 		
 		sidePanel.add(messageBox, BorderLayout.CENTER);
 		sidePanel.add(doTurn, BorderLayout.SOUTH);
+		sidePanel.setMinimumSize(new Dimension( 650, 60));
 		
 		return(sidePanel);
 	}
@@ -278,6 +285,7 @@ public class GameplayGUI extends JFrame {
 	}
 	
 	public void exTurn(String crewIndex, String pirateIndex) {
+		messageBox.setText("");
 		Hero crewMember = crew.getMember(Integer.parseInt(crewIndex)-1);
 		Hero pirateMember = pirates.getMember(Integer.parseInt(pirateIndex)-1);
 		
@@ -285,39 +293,26 @@ public class GameplayGUI extends JFrame {
 		messageBox.append(crewMember.getName()+" attacked "+pirateMember.getName()
 				+" with "+Integer.toString(attack)+" strength\n");
 		int defend = pirateMember.defend(attack);
-		messageBox.append("Pirate Member "+pirateMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+		messageBox.append(pirateMember.getName()+" took "+Integer.toString(defend)+" damage\n");
 		if(pirateMember.getHealth() > 0) {
 			attack = pirateMember.attack();
-			messageBox.append("Pirate "+pirateMember.getName()+" retaliated with "+Integer.toString(attack)+" strength\n");
+			messageBox.append(pirateMember.getName()+" retaliated with "+Integer.toString(attack)+" strength\n");
 			defend = crewMember.defend(attack);
-			messageBox.append("Crew "+crewMember.getName()+" took "+Integer.toString(defend)+" damage\n");
+			messageBox.append(crewMember.getName()+" took "+Integer.toString(defend)+" damage\n");
 			if(crewMember.getHealth() <= 0) {
-				messageBox.append("Crew "+crewMember.getName()+" is dead\n");
+				messageBox.append(crewMember.getName()+" is dead\n");
 			}
-		} else messageBox.append("Pirate "+pirateMember.getName()+" is dead\n");
+		} else messageBox.append(pirateMember.getName()+" is dead\n");
 		
-		/*for(int i = 0; i < 3; i++) {
-			if(crew.getMember(i) != crewMember) {
-				crew.getMember(i).restoreStamina();
-			}
-		}
-		
-		for(int i = 0; i < 3; i++) {
-			if(pirates.getMember(i) != pirateMember) {
-				pirates.getMember(i).restoreStamina();
-			}
-		}*/
 		
 		String cont = refreshStatus();
 		
 		if (cont.equals("pirate victory")) {
-			//TODO:pirate victory behavior
+			messageBox.setText("You've lost! Better luck next time!");
 		}
 		else if (cont.equals("crew victory")) {
-			//TODO:crew victory behavior
-			//Item Dialog wants list of crew as string
-			//need to test Item type (action v/ defense) and use appropriate Hero method setAction/DefenseItem
 			Item itemTemp = levels.get(levelNumber).getItem();
+			itemDialog = new ItemDialog();
 			String type = itemDialog.show(crew.teamTypesAsString(), itemTemp.getStats());
 			crew.getMember(type).setItem(itemTemp);
 			loadLevel();
@@ -333,11 +328,15 @@ public class GameplayGUI extends JFrame {
 	}
 	
 	public void loadLevel() {
+		levelNumber++;
+		pirates = new Party();
 		pirates = levels.get(levelNumber).getPirates();
+		System.out.println("new Pirates: level "+Integer.toString(levelNumber));
+		System.out.println(pirates.getMember(0).getName()+" "+pirates.getMember(1).getName()+" "+pirates.getMember(2).getName());
 		crew.restoreTeam();
 		refreshStatus();
 		topLabel = new JLabel("Level "+Integer.toString(levelNumber+1));
-		levelNumber++;
+		
 		
 		((TitledBorder) pirate1text.getBorder()).setTitle(pirates.getMember(0).getName());
 		((TitledBorder) pirate2text.getBorder()).setTitle(pirates.getMember(1).getName());
@@ -396,59 +395,68 @@ public class GameplayGUI extends JFrame {
 	public void levelBuilder() {
 	  levels = new ArrayList<Level>();
 	  //repeat this 10 times adding in w/e values you want
-	  Party pirateParty = new Party();
-	  /*
-	   * use the random number generator to create a number between 0 - 3;
-	   * from the number 0 --> Brute; 1 -> Medic; 2 -> Engineer; 3 -> Sniper
-	   * a Switch statement would be used based on the number thus adding that String to the
-	   * Array of Strings for Types which will then be used to create a PirateParty
-	   */
+	  Party pirateParty;
+
+	  ArrayList<Item> items = new ArrayList<Item>();
+	  items.add(new ActionItem("Axe", 10, 4, 6));
+	  items.add(new DefenseItem("Shield", 10,5));
+	  items.add(new ActionItem("Sniper Canon", 10, 0, 10));
+	  items.add( new DefenseItem("Running", 2,2));
+	  items.add(new DefenseItem("Medium Gauntlet", 2,2));
+	  items.add(new ActionItem("Canon", 10, 5, 1));
+	  items.add(new ActionItem("ShotGun", 10, 0, 10));
+	  items.add( new ActionItem("Rifle", 8, 5, 2));
+	  items.add( new ActionItem("Knive", 4, 10, 2));
+	  items.add(new ActionItem("Pistol", 7, 0, 5));
 	  
-	  //Initializing the Array of Strings
-	  ArrayList<String> typesOfPirates = new ArrayList<String>();
-	  
-	  //initialize the integer randomChoice for the choice of type 
-	  int randomChoice;
-	  for (int i = 0; i < 4; i++) {
-	  
-	  //Initialize the random numbers
-		  IntRandomNumberGenerator(1, 4);
-		  randomChoice = nextInt();
-		  switch (randomChoice) {
-			  case 1:
-			   typesOfPirates.add("Brute");
-			   System.out.printf("Brute added to Pirates");
-			   break;
-			  case 2:
-			   typesOfPirates.add("Medic");
-			   System.out.printf("Medic added to Pirates");
-			   break; 
-			  case 3:
-			   typesOfPirates.add("Engineer");
-			   System.out.printf("Engineer added to Pirates");
-			   break;
-			  case 4:
-			   typesOfPirates.add("Sniper");
-			   System.out.printf("Sniper added to Pirates");
-			   break;
-			  default:
-			   System.out.printf("Invalid number selected");
-		  }	  
-	  }
-	  
-	  //switching it to String to be passed to the party builder
-	  String[] returnedPirates = new String[typesOfPirates.size()];
-	    returnedPirates = (String[]) typesOfPirates.toArray(returnedPirates);
-	   
-	 
-	  //Build the Pirateparty
-	   pirateParty.createParty("Pirate", returnedPirates);
-	  
-	  
-	  levels.add(new Level(pirateParty,
-	     new ActionItem("name of item", 0, 0, 0) //strength, defense, stamina, luck (set some to 0)
-	    )
-	  );
+	  for(int j = 0; j < items.size(); j++) {
+		  pirateParty = new Party();
+		  //Initializing the Array of Strings
+		  ArrayList<String> typesOfPirates = new ArrayList<String>();
+		  
+		  //initialize the integer randomChoice for the choice of type 
+		  int randomChoice;
+		  for (int i = 0; i < 3; i++) {
+		  
+		  //Initialize the random numbers
+			  IntRandomNumberGenerator(1, 4);
+			  randomChoice = nextInt();
+			  switch (randomChoice) {
+				  case 1:
+				   typesOfPirates.add("Brute");
+				   System.out.printf("Brute added to Pirates\n");
+				   break;
+				  case 2:
+				   typesOfPirates.add("Medic");
+				   //System.out.printf("Medic added to Pirates\n");
+				   break; 
+				  case 3:
+				   typesOfPirates.add("Engineer");
+				   //System.out.printf("Engineer added to Pirates\n");
+				   break;
+				  case 4:
+				   typesOfPirates.add("Sniper");
+				   //System.out.printf("Sniper added to Pirates\n");
+				   break;
+				  default:
+				   //System.out.printf("Invalid number selected\n");
+			  }	  
+		  }
+		  
+		  //switching it to String to be passed to the party builder
+		  String[] returnedPirates = new String[typesOfPirates.size()];
+		    returnedPirates = (String[]) typesOfPirates.toArray(returnedPirates);
+		   
+		 
+		  //Build the Pirateparty
+		   pirateParty.createPirateParty(returnedPirates, levelNumber);
+		  
+		  
+		  levels.add(new Level(pirateParty,
+		     items.get(j) //strength, defense, stamina, luck (set some to 0)
+		    )
+		  );
+	 }
 	}
 	  
 	 

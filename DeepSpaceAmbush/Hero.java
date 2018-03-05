@@ -128,7 +128,7 @@ public class Hero {
 		}
 		else if (actionItem != null) {
 			if (new Random().nextInt(10)*10 <= luck-10 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
-			health = (health - dmg-stamina/10)/crit;
+			health = (health - (dmg-stamina/10)/crit);
 		}
 		else if (defenseItem != null) {
 			if (new Random().nextInt(10)*10 <= luck-10 & type != Party.heroType.Engineer) crit = 2; //luck of 1 has 1/10 to be true
@@ -136,7 +136,7 @@ public class Hero {
 		}
 		else {
 			if (new Random().nextInt(10)*10 <= luck-10 & type != Party.heroType.Engineer) crit = 2; 
-			health = (health - dmg -stamina/10)/crit;
+			health = (health - (dmg -stamina/10)/crit);
 		}
 		
 		return arc - health;

@@ -58,9 +58,13 @@ public class ItemDialog{
 		
         int optionType = JOptionPane.OK_CANCEL_OPTION;
 
-        int selection = JOptionPane.showOptionDialog(null,
+       int selection = JOptionPane.showOptionDialog(null,
                 top, "Item Assingment", optionType, JOptionPane.QUESTION_MESSAGE, null,
                 setCrew(crew), null);
+        
+/*        Object selection = JOptionPane.showInputDialog(
+                top, null, "Item Assingment", JOptionPane.QUESTION_MESSAGE, null,
+                setCrew(crew), null);*/
 
         if (selection == 0) return null;
         else {
